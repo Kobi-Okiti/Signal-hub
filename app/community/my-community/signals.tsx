@@ -58,6 +58,7 @@ export default function MyCommunitySignals() {
     setRefreshing(false);
   };
 
+  // Refesh screen on refocus
   useFocusEffect(
     useCallback(() => {
       if (!isLoaded || !user) return;
@@ -75,7 +76,7 @@ export default function MyCommunitySignals() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
-      {/* Header */}
+      {/* Header - Outside KeyboardAvoidingView to give it the static feel */}
       <View
         style={{
           flexDirection: "row",
@@ -104,44 +105,45 @@ export default function MyCommunitySignals() {
           Signal History
         </Text>
       </View>
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: spacing.xxl }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-      > 
-      <View style={{ paddingHorizontal: spacing.xl }}>
-        {signals.length === 0 ? (
-          <View
-            style={[
-              commonStyles.card,
-              { alignItems: "center", paddingVertical: spacing.xxl },
-            ]}
-          >
-            <Ionicons
-              name="analytics-outline"
-              size={48}
-              color={colors.textSecondary}
-            />
-            <Text
+      >
+        <View style={{ paddingHorizontal: spacing.xl }}>
+          {signals.length === 0 ? (
+            <View
               style={[
-                commonStyles.caption,
-                { marginTop: spacing.md, textAlign: "center" },
+                commonStyles.card,
+                { alignItems: "center", paddingVertical: spacing.xxl },
               ]}
             >
-              No signals yet. Create your first signal to get started!
-            </Text>
-          </View>
-        ) : (
-          signals.map((signal) => (
-            <SignalCard
-              key={signal.id}
-              signal={signal}
-              onUpdated={(status) => handleSignalUpdate(signal.id, status)}
-            />
-          ))
-        )}
+              <Ionicons
+                name="analytics-outline"
+                size={48}
+                color={colors.textSecondary}
+              />
+              <Text
+                style={[
+                  commonStyles.caption,
+                  { marginTop: spacing.md, textAlign: "center" },
+                ]}
+              >
+                No signals yet. Create your first signal to get started!
+              </Text>
+            </View>
+          ) : (
+            signals.map((signal) => (
+              <SignalCard
+                key={signal.id}
+                signal={signal}
+                onUpdated={(status) => handleSignalUpdate(signal.id, status)}
+              />
+            ))
+          )}
         </View>
       </ScrollView>
     </View>

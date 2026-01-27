@@ -12,10 +12,6 @@ export default function MyCommunityLayout() {
         options={{ title: "My Community" }}
       />
       <Stack.Screen
-        name="edit-description"
-        options={{ title: "Edit Description" }}
-      />
-      <Stack.Screen
         name="new-signals"
         options={{ title: "New Signal" }}
       />

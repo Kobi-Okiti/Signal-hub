@@ -16,6 +16,9 @@ export default function CommunityLayout() {
           paddingBottom: spacing.sm,
           paddingTop: spacing.sm,
           height: 80,
+          // borderRadius: 150,
+          // marginBottom: 10,
+          // marginHorizontal: 10,
         },
         tabBarLabelStyle: {
           fontSize: fontSize.xs,

@@ -164,8 +164,8 @@ export default function CommunityDashboard() {
           />
         }
       >
-        {/* Header */}
         <View style={{ padding: spacing.xl, paddingBottom: spacing.lg }}>
+          {/* Header */}
           <Text
             style={{
               fontSize: fontSize.xxl,
@@ -175,6 +175,8 @@ export default function CommunityDashboard() {
           >
             {community.name}
           </Text>
+
+          {/* Status */}
           {community.status === "pending" && (
             <View
               style={{
@@ -222,7 +224,7 @@ export default function CommunityDashboard() {
           )}
         </View>
 
-        {/* Stats Grid */}
+        {/* Community Stats Grid */}
         <View
           style={{ paddingHorizontal: spacing.xl, marginBottom: spacing.lg }}
         >

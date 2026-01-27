@@ -65,7 +65,7 @@ export default function NewSignalScreen() {
     const markets = marketsData?.map((m) => m.market) ?? [];
     setCommunityMarkets(markets);
 
-    // Set default market to first available
+    // Set default market to first available market
     if (markets.length > 0) {
       const firstMarket = markets[0] as MarketType;
       setMarket(firstMarket);
@@ -92,7 +92,7 @@ export default function NewSignalScreen() {
   const handleCreateSignal = async () => {
     if (!community) return;
 
-    // Validate market
+    // Validate market incase user somehow finds a way to set the wrong market
     if (!communityMarkets.includes(market as Market)) {
       Alert.alert(
         "Invalid Market",
@@ -130,7 +130,7 @@ export default function NewSignalScreen() {
     router.back();
   };
 
-  // Custom Picker Component
+  // Custom Picker Component (todo: should move out to a single component)
   const CustomPicker = ({
     label,
     value,
@@ -223,7 +223,7 @@ export default function NewSignalScreen() {
     </Modal>
   );
 
-  // Custom Segmented Control
+  // Custom Segmented Control (todo: should move out to a single component)
   const CustomSegmentedControl = ({
     options,
     selected,
@@ -298,7 +298,7 @@ export default function NewSignalScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
-      {/* Header - Outside KeyboardAvoidingView */}
+      {/* Header - Outside KeyboardAvoidingView to give it the static feel */}
       <View
         style={{
           flexDirection: "row",
@@ -432,7 +432,7 @@ export default function NewSignalScreen() {
             />
           </View>
 
-          {/* Direction */}
+          {/* Trade Direction */}
           <View style={{ marginBottom: spacing.lg }}>
             <Text
               style={{
@@ -520,7 +520,7 @@ export default function NewSignalScreen() {
             />
           </View>
 
-          {/* Submit Button */}
+          {/* Submit Trade Signal */}
           <TouchableOpacity
             onPress={handleCreateSignal}
             disabled={loading}

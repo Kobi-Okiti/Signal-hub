@@ -4,7 +4,7 @@ export type CommunityType = {
   name: string;
   description: string | null;
   status: "active" | "pending";
-  subscription_price: number | null;
+  subscription_price: number;
 };
 
 export type CommunityStatsType = {

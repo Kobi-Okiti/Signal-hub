@@ -28,7 +28,7 @@ export default function MyCommunityScreen() {
   const [recentSignals, setRecentSignals] = useState<Signal[]>([]);
   const [marketType, setMarketType] = useState<MarketDataType[]>([]);
 
-  // Combined fetch function
+
   const fetchData = useCallback(async () => {
     if (!user?.id) return;
 
@@ -43,7 +43,7 @@ export default function MyCommunityScreen() {
     if (communityData) {
       setCommunity(communityData);
 
-      // Fetch signals with the community ID we just got
+      // Fetch signals with the community ID
       const { data: signalsData } = await supabase
         .from("signals")
         .select("*")
@@ -53,7 +53,7 @@ export default function MyCommunityScreen() {
 
       setRecentSignals(signalsData ?? []);
 
-      // Fetch signals with the community ID we just got
+      // Fetch Market data for the community
       const { data: marketsData } = await supabase
         .from("community_markets")
         .select("*")
@@ -65,7 +65,7 @@ export default function MyCommunityScreen() {
     setLoading(false);
   }, [user?.id]);
 
-  // Refresh on focus - just like dashboard
+  // Refresh on focus of tab
   useFocusEffect(
     useCallback(() => {
       fetchData();
@@ -78,6 +78,7 @@ export default function MyCommunityScreen() {
     setRefreshing(false);
   };
 
+  // Handle Signal Update locally for better UX
   const handleSignalUpdate = (id: string, status: "win" | "loss") => {
     setRecentSignals((prev) =>
       prev.map((s) => (s.id === id ? { ...s, status } : s)),
@@ -160,6 +161,7 @@ export default function MyCommunityScreen() {
             </View>
           )}
 
+          {/* Traded Market Badge */}
           {community.status === "active" && (
             <View
               style={{
@@ -184,6 +186,8 @@ export default function MyCommunityScreen() {
             </View>
           )}
 
+
+          {/* Markets Traded */}
           {marketType.length !== 0 && (
             <View
               style={{
@@ -220,7 +224,7 @@ export default function MyCommunityScreen() {
           )}
         </View>
 
-        {/* Info Card */}
+        {/* Community Info Card */}
         <View
           style={{ paddingHorizontal: spacing.xl, marginBottom: spacing.lg }}
         >
@@ -278,7 +282,7 @@ export default function MyCommunityScreen() {
           </View>
         </View>
 
-        {/* Action Buttons */}
+        {/* New Signal and View Signals Buttons */}
         <View
           style={{ paddingHorizontal: spacing.xl, marginBottom: spacing.xl }}
         >
