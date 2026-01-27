@@ -49,7 +49,7 @@ export default function SignUpScreen() {
     }
   };
 
-  // Step 2: Verify email
+  // Verify email
   const onVerifyPress = async () => {
     if (!isLoaded) return;
 
@@ -91,7 +91,7 @@ export default function SignUpScreen() {
     }
   };
 
-  // Verification View Component
+  // Verify Email View Component
   if (pendingVerification) {
     return (
       <KeyboardAvoidingView 
@@ -219,7 +219,7 @@ export default function SignUpScreen() {
 
           {/* Form */}
           <View style={{ marginBottom: spacing.xl }}>
-            {/* Name Row */}
+            {/* Name */}
             <View style={{ flexDirection: "row", gap: spacing.md, marginBottom: spacing.lg }}>
               <View style={{ flex: 1 }}>
                 <Text style={{ 

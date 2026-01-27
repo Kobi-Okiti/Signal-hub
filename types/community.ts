@@ -1,7 +1,9 @@
 export type CommunityType = {
   id: string;
+  owner_id: string;
   name: string;
   description: string | null;
+  status: "active" | "pending";
   subscription_price: number | null;
 };
 

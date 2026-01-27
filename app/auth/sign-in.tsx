@@ -112,7 +112,7 @@ export default function SignInScreen() {
             {/* Forgot Password - Not Developed Yet */}
             <TouchableOpacity 
               style={{ alignSelf: "flex-end", marginTop: spacing.sm }}
-              onPress={() => {/* Add forgot password logic */}}
+              onPress={() => {}}
             >
               <Text style={{ color: colors.primary, fontSize: fontSize.sm }}>
                 Forgot password?

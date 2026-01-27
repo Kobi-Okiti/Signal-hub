@@ -1,28 +1,29 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { colors, spacing, fontSize } from "@/constants/theme";
 
 export default function CommunityLayout() {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: 'black',
-        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textSecondary,
         tabBarStyle: {
-          backgroundColor: 'white',
-          borderTopColor: 'lightgray',
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
           borderTopWidth: 1,
-          paddingBottom: 8,
-          paddingTop: 8,
+          paddingBottom: spacing.sm,
+          paddingTop: spacing.sm,
           height: 80,
         },
         tabBarLabelStyle: {
-          fontSize: 12,
+          fontSize: fontSize.xs,
           fontWeight: "600",
+          marginTop: 2,
         },
       }}
     >
-      {/* Dashboard */}
       <Tabs.Screen
         name="dashboard"
         options={{
@@ -33,35 +34,32 @@ export default function CommunityLayout() {
         }}
       />
 
-      {/* My Community */}
       <Tabs.Screen
-        name="my-community/index"
+        name="my-community"
         options={{
-          title: "My Community",
+          title: "Community",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="people" color={color} size={size} />
           ),
         }}
       />
 
-      {/* Subscribers */}
       <Tabs.Screen
         name="subscribers"
         options={{
           title: "Subscribers",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="cash-outline" color={color} size={size} />
+            <Ionicons name="wallet-outline" color={color} size={size} />
           ),
         }}
       />
 
-      {/* Profile */}
       <Tabs.Screen
         name="profile"
         options={{
           title: "Profile",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" color={color} size={size} />
+            <Ionicons name="person-circle-outline" color={color} size={size} />
           ),
         }}
       />
