@@ -18,3 +18,10 @@ export type SubscriberWithUser = Subscriber & {
     email: string;
   };
 };
+
+export interface Follower {
+  id: string;
+  user_id: string;
+  community_id: string;
+  created_at: string;
+}

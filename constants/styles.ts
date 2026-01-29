@@ -136,4 +136,18 @@ export const commonStyles = StyleSheet.create({
     backgroundColor: colors.border,
     marginVertical: spacing.md,
   },
+
+  cardWithShadow: {
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    // iOS shadow
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    // Android shadow
+    elevation: 2,
+  },
 });
