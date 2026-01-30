@@ -36,7 +36,7 @@ export default function NewSignalScreen() {
   const [stopLoss, setStopLoss] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Modal states
+  // Market an Asset Modal states
   const [showMarketPicker, setShowMarketPicker] = useState(false);
   const [showAssetPicker, setShowAssetPicker] = useState(false);
 

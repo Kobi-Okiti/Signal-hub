@@ -32,7 +32,7 @@ export default function MyCommunityScreen() {
   const fetchData = useCallback(async () => {
     if (!user?.id) return;
 
-    setLoading(true); // Set loading on every fetch
+    setLoading(true);
 
     const { data: communityData } = await supabase
       .from("communities")
@@ -53,7 +53,7 @@ export default function MyCommunityScreen() {
 
       setRecentSignals(signalsData ?? []);
 
-      // Fetch Market data for the community
+      // Fetch the Market data for the community
       const { data: marketsData } = await supabase
         .from("community_markets")
         .select("*")

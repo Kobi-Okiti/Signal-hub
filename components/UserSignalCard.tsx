@@ -10,7 +10,7 @@ type Props = {
       name: string;
     };
   };
-  onPress: () => void;
+  onPress?: () => void;
 };
 
 export default function UserSignalCard({ signal, onPress }: Props) {

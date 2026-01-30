@@ -29,7 +29,7 @@ export default function MyCommunitySignals() {
 
     setLoading(true);
 
-    // 1️⃣ Get community id
+    // Fetch the community id
     const { data: community } = await supabase
       .from("communities")
       .select("id")
@@ -41,7 +41,7 @@ export default function MyCommunitySignals() {
       return;
     }
 
-    // 2️⃣ Fetch all signals for community
+    //Fetch all signals for community from the community id
     const { data } = await supabase
       .from("signals")
       .select("*")
