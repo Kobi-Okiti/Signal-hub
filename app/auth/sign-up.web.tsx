@@ -15,6 +15,7 @@ import { commonStyles } from "@/constants/styles";
 import { colors, fontSize, spacing } from "@/constants/theme";
 import { supabase } from "../../lib/supabase";
 import { showAlert } from "@/lib/showAlert";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function SignUpScreenWeb() {
   const { isLoaded, isSignedIn } = useAuth();
@@ -26,6 +27,7 @@ export default function SignUpScreenWeb() {
   const [lastName, setLastName] = React.useState("");
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
   const [pendingVerification, setPendingVerification] = React.useState(false);
   const [code, setCode] = React.useState("");
   const [loading, setLoading] = React.useState(false);
@@ -374,15 +376,33 @@ export default function SignUpScreenWeb() {
             >
               Password
             </Text>
-            <TextInput
-              placeholder="Create a password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              autoCapitalize="none"
-              style={commonStyles.input}
-              placeholderTextColor={colors.textSecondary}
-            />
+            <View style={{ position: "relative" }}>
+              <TextInput
+                placeholder="Enter your password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={!showPassword}
+                autoCapitalize="none"
+                style={[commonStyles.input, { paddingRight: spacing.xxl * 2 }]}
+                placeholderTextColor={colors.textSecondary}
+              />
+              <TouchableOpacity
+                onPress={() => setShowPassword(!showPassword)}
+                style={{
+                  position: "absolute",
+                  right: spacing.lg,
+                  top: 0,
+                  bottom: 0,
+                  justifyContent: "center",
+                }}
+              >
+                <Ionicons
+                  name={showPassword ? "eye-outline" : "eye-off-outline"}
+                  size={22}
+                  color={colors.textSecondary}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
 
           {/* Sign Up Button */}

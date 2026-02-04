@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { supabase } from "@/lib/supabase";
 import { CommunityType } from "@/types/community";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { colors, spacing, fontSize, borderRadius } from "@/constants/theme";
 import { commonStyles } from "@/constants/styles";
 import { useDebounce } from "../../hooks/useDebounce";
@@ -118,10 +118,12 @@ export default function DiscoverScreen() {
   []
 );
 
-  useEffect(() => {
-    setPage(0);
+  useFocusEffect(
+      useCallback(() => {
+         setPage(0);
     fetchCommunities(0, false);
-  }, [fetchCommunities]);
+      }, [fetchCommunities]),
+    );
 
   const onRefresh = async () => {
     setRefreshing(true);

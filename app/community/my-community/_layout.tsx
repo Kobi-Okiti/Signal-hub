@@ -19,6 +19,10 @@ export default function MyCommunityLayout() {
         name="signals"
         options={{ title: "Signal History" }}
       />
+      <Stack.Screen
+        name="reviews"
+        options={{ title: "Review History" }}
+      />
     </Stack>
   );
 }

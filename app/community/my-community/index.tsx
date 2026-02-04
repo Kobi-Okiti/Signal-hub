@@ -28,7 +28,6 @@ export default function MyCommunityScreen() {
   const [recentSignals, setRecentSignals] = useState<Signal[]>([]);
   const [marketType, setMarketType] = useState<MarketDataType[]>([]);
 
-
   const fetchData = useCallback(async () => {
     if (!user?.id) return;
 
@@ -186,7 +185,6 @@ export default function MyCommunityScreen() {
             </View>
           )}
 
-
           {/* Markets Traded */}
           {marketType.length !== 0 && (
             <View
@@ -321,6 +319,22 @@ export default function MyCommunityScreen() {
               <Text style={commonStyles.buttonTextOutline}>
                 View All Signals
               </Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => router.push("/community/my-community/reviews")}
+            style={[commonStyles.buttonOutline, { marginTop: spacing.md }]}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: spacing.sm,
+              }}
+            >
+              <Ionicons name="star-outline" size={20} color={colors.primary} />
+              <Text style={commonStyles.buttonTextOutline}>View Reviews</Text>
             </View>
           </TouchableOpacity>
         </View>

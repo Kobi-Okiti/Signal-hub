@@ -1,4 +1,4 @@
-import { useLocalSearchParams, useRouter, Redirect } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useAuth, useUser } from "@clerk/clerk-expo";
 import { useEffect, useState, useCallback } from "react";
 import {
@@ -156,14 +156,6 @@ export default function CommunityProfile() {
     );
   }
 
-  if (!isSignedIn) return <Redirect href="/auth/sign-in" />;
-
-  const role = user?.unsafeMetadata?.role;
-
-  if (!role) return <Redirect href="/onboarding/role" />;
-
-  if (role !== "user") return <Redirect href="/community/dashboard" />;
-
   const onRefresh = async () => {
     setRefreshing(true);
     setPage(0);
@@ -179,7 +171,7 @@ export default function CommunityProfile() {
     }
   };
 
-  if ( loading && !refreshing || !community || !stats) {
+  if ((loading && !refreshing) || !community || !stats) {
     return (
       <View
         style={{
@@ -384,20 +376,25 @@ export default function CommunityProfile() {
               </Text>
             </View>
 
-
-              
-              <View style={{ flex: 1, flexDirection:"row", alignItems: "center", justifyContent: "flex-start", marginBottom: spacing.lg, }}>
-                <Text
-                  style={{
-                    fontSize: fontSize.xl,
-                    fontWeight: "700",
-                    color: colors.text,
-                  }}
-                >
-                  {stats.total_signals} Signals
-                </Text>
-              </View>
-            
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                marginBottom: spacing.lg,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: fontSize.xl,
+                  fontWeight: "700",
+                  color: colors.text,
+                }}
+              >
+                {stats.total_signals} Signals
+              </Text>
+            </View>
 
             {/* Stats Grid */}
             <View
@@ -616,6 +613,28 @@ export default function CommunityProfile() {
               </Text>
             </View>
           )}
+        </View>
+
+        <View
+          style={{ paddingHorizontal: spacing.xl, marginBottom: spacing.xl }}
+        >
+          <TouchableOpacity
+            onPress={() => router.push(`/community-profile/${id}/reviews`)}
+            style={commonStyles.buttonOutline}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: spacing.sm,
+              }}
+            >
+              <Ionicons name="star-outline" size={20} color={colors.primary} />
+              <Text style={commonStyles.buttonTextOutline}>
+                View & Write Reviews
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
 
         {/* Tabs */}

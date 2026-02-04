@@ -14,6 +14,7 @@ import {
 import { colors, spacing, fontSize } from "@/constants/theme";
 import { commonStyles } from "@/constants/styles";
 import { showAlert } from "@/lib/showAlert";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function SignInScreenWeb() {
   const { isLoaded, isSignedIn } = useAuth();
@@ -23,6 +24,7 @@ export default function SignInScreenWeb() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   if (!isLoaded || !userLoaded) {
@@ -129,25 +131,43 @@ export default function SignInScreenWeb() {
             >
               Password
             </Text>
-            <TextInput
-              placeholder="Enter your password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              autoCapitalize="none"
-              style={commonStyles.input}
-              placeholderTextColor={colors.textSecondary}
-            />
+            <View style={{ position: "relative" }}>
+              <TextInput
+                placeholder="Enter your password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={!showPassword}
+                autoCapitalize="none"
+                style={[commonStyles.input, { paddingRight: spacing.xxl * 2 }]}
+                placeholderTextColor={colors.textSecondary}
+              />
+              <TouchableOpacity
+                onPress={() => setShowPassword(!showPassword)}
+                style={{
+                  position: "absolute",
+                  right: spacing.lg,
+                  top: 0,
+                  bottom: 0,
+                  justifyContent: "center",
+                }}
+              >
+                <Ionicons
+                  name={showPassword ? "eye-outline" : "eye-off-outline"}
+                  size={22}
+                  color={colors.textSecondary}
+                />
+              </TouchableOpacity>
+            </View>
 
             {/* Forgot Password - Not Developed Yet */}
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{ alignSelf: "flex-end", marginTop: spacing.sm }}
               onPress={() => {}}
             >
               <Text style={{ color: colors.primary, fontSize: fontSize.sm }}>
                 Forgot password?
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
           {/* Sign In Button */}
