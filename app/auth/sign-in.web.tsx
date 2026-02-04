@@ -1,21 +1,42 @@
-import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { useAuth, useSignIn, useUser } from "@clerk/clerk-expo";
+import { Redirect, useRouter } from "expo-router";
 import { useState } from "react";
-import { useSignIn } from "@clerk/clerk-expo";
-import { useRouter } from "expo-router";
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { colors, spacing, fontSize } from "@/constants/theme";
 import { commonStyles } from "@/constants/styles";
 import { showAlert } from "@/lib/showAlert";
 
-export default function SignInScreen() {
-  const { signIn, isLoaded, setActive } = useSignIn();
+export default function SignInScreenWeb() {
+  const { isLoaded, isSignedIn } = useAuth();
+  const { isLoaded: userLoaded } = useUser();
+  const { signIn, isLoaded: signInLoaded, setActive } = useSignIn();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  if (!isLoaded || !userLoaded) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
+
+  if (isSignedIn) return <Redirect href="/" />;
+
   const onSignInPress = async () => {
-    if (!isLoaded) return;
+    if (!signInLoaded) return;
 
     if (!email || !password) {
       showAlert("Error", "Please fill all fields");
@@ -45,41 +66,47 @@ export default function SignInScreen() {
   };
 
   return (
-    <KeyboardAvoidingView 
+    <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1, backgroundColor: colors.background }}
     >
-      <ScrollView 
+      <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
       >
         <View style={{ flex: 1, padding: spacing.xl, justifyContent: "center" }}>
           {/* Header */}
           <View style={{ marginBottom: spacing.xxl * 2 }}>
-            <Text style={{ 
-              fontSize: fontSize.xxl + 8, 
-              fontWeight: "800", 
-              color: colors.text,
-              marginBottom: spacing.xs 
-            }}>
+            <Text
+              style={{
+                fontSize: fontSize.xxl + 8,
+                fontWeight: "800",
+                color: colors.text,
+                marginBottom: spacing.xs,
+              }}
+            >
               Welcome Back
             </Text>
-            <Text style={{ 
-              fontSize: fontSize.md, 
-              color: colors.textSecondary 
-            }}>
+            <Text
+              style={{
+                fontSize: fontSize.md,
+                color: colors.textSecondary,
+              }}
+            >
               Sign in to continue trading
             </Text>
           </View>
 
           {/* Form */}
           <View style={{ marginBottom: spacing.xl }}>
-            <Text style={{ 
-              fontSize: fontSize.sm, 
-              fontWeight: "600", 
-              color: colors.text,
-              marginBottom: spacing.xs 
-            }}>
+            <Text
+              style={{
+                fontSize: fontSize.sm,
+                fontWeight: "600",
+                color: colors.text,
+                marginBottom: spacing.xs,
+              }}
+            >
               Email
             </Text>
             <TextInput
@@ -92,12 +119,14 @@ export default function SignInScreen() {
               placeholderTextColor={colors.textSecondary}
             />
 
-            <Text style={{ 
-              fontSize: fontSize.sm, 
-              fontWeight: "600", 
-              color: colors.text,
-              marginBottom: spacing.xs 
-            }}>
+            <Text
+              style={{
+                fontSize: fontSize.sm,
+                fontWeight: "600",
+                color: colors.text,
+                marginBottom: spacing.xs,
+              }}
+            >
               Password
             </Text>
             <TextInput
@@ -111,7 +140,7 @@ export default function SignInScreen() {
             />
 
             {/* Forgot Password - Not Developed Yet */}
-            <TouchableOpacity 
+            <TouchableOpacity
               style={{ alignSelf: "flex-end", marginTop: spacing.sm }}
               onPress={() => {}}
             >
@@ -126,11 +155,11 @@ export default function SignInScreen() {
             onPress={onSignInPress}
             disabled={loading}
             style={[
-              commonStyles.buttonPrimary, 
-              { 
+              commonStyles.buttonPrimary,
+              {
                 marginBottom: spacing.lg,
-                opacity: loading ? 0.6 : 1 
-              }
+                opacity: loading ? 0.6 : 1,
+              },
             ]}
           >
             <Text style={commonStyles.buttonText}>
@@ -139,16 +168,20 @@ export default function SignInScreen() {
           </TouchableOpacity>
 
           {/* Sign Up Link Route */}
-          <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}
+          >
             <Text style={{ color: colors.textSecondary, fontSize: fontSize.md }}>
               Don&apos;t have an account?{" "}
             </Text>
-            <TouchableOpacity onPress={() => router.push("/auth/sign-up")}>
-              <Text style={{ 
-                color: colors.primary, 
-                fontSize: fontSize.md, 
-                fontWeight: "600" 
-              }}>
+            <TouchableOpacity onPress={() => router.push("/auth/sign-up")}> 
+              <Text
+                style={{
+                  color: colors.primary,
+                  fontSize: fontSize.md,
+                  fontWeight: "600",
+                }}
+              >
                 Sign up
               </Text>
             </TouchableOpacity>

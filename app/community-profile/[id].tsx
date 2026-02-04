@@ -1,5 +1,5 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { useUser } from "@clerk/clerk-expo";
+import { useLocalSearchParams, useRouter, Redirect } from "expo-router";
+import { useAuth, useUser } from "@clerk/clerk-expo";
 import { useEffect, useState, useCallback } from "react";
 import {
   View,
@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
-  Alert,
   RefreshControl,
 } from "react-native";
 import { supabase } from "@/lib/supabase";
@@ -18,6 +17,7 @@ import UserSignalCard from "@/components/UserSignalCard";
 import { colors, spacing, fontSize, borderRadius } from "@/constants/theme";
 import { commonStyles } from "@/constants/styles";
 import { Ionicons } from "@expo/vector-icons";
+import { showAlert } from "@/lib/showAlert";
 
 type Tab = "free" | "vip";
 
@@ -39,7 +39,8 @@ const ITEMS_PER_PAGE = 20;
 
 export default function CommunityProfile() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { user } = useUser();
+  const { isLoaded, isSignedIn } = useAuth();
+  const { user, isLoaded: userLoaded } = useUser();
   const router = useRouter();
 
   const [community, setCommunity] = useState<CommunityType | null>(null);
@@ -136,9 +137,32 @@ export default function CommunityProfile() {
   );
 
   useEffect(() => {
+    if (!isSignedIn || !user) return;
     setPage(0);
     fetchData(0, false);
-  }, [id]);
+  }, [id, isSignedIn, user?.id]);
+
+  if (!isLoaded || !userLoaded) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          backgroundColor: colors.background,
+        }}
+      >
+        <ActivityIndicator color={colors.primary} />
+      </View>
+    );
+  }
+
+  if (!isSignedIn) return <Redirect href="/auth/sign-in" />;
+
+  const role = user?.unsafeMetadata?.role;
+
+  if (!role) return <Redirect href="/onboarding/role" />;
+
+  if (role !== "user") return <Redirect href="/community/dashboard" />;
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -199,7 +223,7 @@ export default function CommunityProfile() {
   const handleSubscribe = () => {
     if (!user) return;
 
-    Alert.alert(
+    showAlert(
       "Subscribe to Premium",
       `Get access to all VIP signals for ₦${community.subscription_price}/month`,
       [

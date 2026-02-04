@@ -2,7 +2,6 @@ import {
   View,
   Text,
   TextInput,
-  Alert,
   ScrollView,
   Platform,
   KeyboardAvoidingView,
@@ -20,6 +19,7 @@ import { CommunityType } from "@/types/community";
 import { colors, spacing, fontSize, borderRadius } from "@/constants/theme";
 import { commonStyles } from "@/constants/styles";
 import { Ionicons } from "@expo/vector-icons";
+import { showAlert } from "@/lib/showAlert";
 
 export default function NewSignalScreen() {
   const { user, isLoaded } = useUser();
@@ -94,7 +94,7 @@ export default function NewSignalScreen() {
 
     // Validate market incase user somehow finds a way to set the wrong market
     if (!communityMarkets.includes(market as Market)) {
-      Alert.alert(
+      showAlert(
         "Invalid Market",
         `Your community doesn't trade in ${market}. Please select a market you've registered for.`,
       );
@@ -102,8 +102,69 @@ export default function NewSignalScreen() {
     }
 
     if (!entryPrice) {
-      Alert.alert("Missing info", "Entry price is required");
+      showAlert("Missing info", "Entry price is required");
       return;
+    }
+    if (!takeProfit) {
+      showAlert("Missing info", "Take Profit is required");
+      return;
+    }
+    if (!stopLoss) {
+      showAlert("Missing info", "Stop Loss is required");
+      return;
+    }
+
+    const entry = Number(entryPrice);
+    const parsedTakeProfit = Number(takeProfit);
+    const parsedStopLoss = Number(stopLoss);
+
+    if (Number.isNaN(entry)) {
+      showAlert("Invalid entry price", "Entry price must be a valid number.");
+      return;
+    }
+
+    if (Number.isNaN(parsedTakeProfit)) {
+      showAlert("Invalid take profit", "Take profit must be a valid number.");
+      return;
+    }
+
+    if (Number.isNaN(parsedStopLoss)) {
+      showAlert("Invalid stop loss", "Stop loss must be a valid number.");
+      return;
+    }
+
+    if (direction === "buy") {
+      if (parsedTakeProfit <= entry) {
+        showAlert(
+          "Invalid take profit",
+          "For a buy signal, take profit must be higher than the entry price.",
+        );
+        return;
+      }
+
+      if (parsedStopLoss >= entry) {
+        showAlert(
+          "Invalid stop loss",
+          "For a buy signal, stop loss must be lower than the entry price.",
+        );
+        return;
+      }
+    } else {
+      if (parsedTakeProfit >= entry) {
+        showAlert(
+          "Invalid take profit",
+          "For a sell signal, take profit must be lower than the entry price.",
+        );
+        return;
+      }
+
+      if (parsedStopLoss <= entry) {
+        showAlert(
+          "Invalid stop loss",
+          "For a sell signal, stop loss must be higher than the entry price.",
+        );
+        return;
+      }
     }
 
     setLoading(true);
@@ -114,19 +175,20 @@ export default function NewSignalScreen() {
       market,
       type,
       direction,
-      entry_price: Number(entryPrice),
-      take_profit: takeProfit ? Number(takeProfit) : null,
-      stop_loss: stopLoss ? Number(stopLoss) : null,
+      entry_price: entry,
+      take_profit: parsedTakeProfit,
+      stop_loss: parsedStopLoss,
       status: "pending",
     });
 
     setLoading(false);
 
     if (error) {
-      Alert.alert("Error", error.message);
+      showAlert("Error", error.message);
       return;
     }
 
+    showAlert("Success", "Signal posted successfully!");
     router.back();
   };
 
@@ -486,7 +548,7 @@ export default function NewSignalScreen() {
                 marginBottom: spacing.xs,
               }}
             >
-              Take Profit (Optional)
+              Take Profit *
             </Text>
             <TextInput
               style={commonStyles.input}
@@ -508,7 +570,7 @@ export default function NewSignalScreen() {
                 marginBottom: spacing.xs,
               }}
             >
-              Stop Loss (Optional)
+              Stop Loss *
             </Text>
             <TextInput
               style={commonStyles.input}

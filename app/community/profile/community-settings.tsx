@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TextInput,
-  Alert,
   ActivityIndicator,
   TouchableOpacity,
   ScrollView,
@@ -18,6 +17,7 @@ import { colors, spacing, fontSize, borderRadius } from "@/constants/theme";
 import { commonStyles } from "@/constants/styles";
 import { Ionicons } from "@expo/vector-icons";
 import { MarketType } from "@/types/signal";
+import { showAlert } from "@/lib/showAlert";
 
 const ALL_MARKETS: MarketType[] = ["forex", "crypto", "stocks"];
 
@@ -91,7 +91,7 @@ export default function CommunitySettings() {
 
     // Check if Markets of Community info has been changes
     if (Object.keys(updates).length === 0 && !marketsChanged) {
-      Alert.alert("Nothing to update");
+      showAlert("Nothing to update");
       return;
     }
 
@@ -105,7 +105,7 @@ export default function CommunitySettings() {
     setSaving(false);
 
     if (error) {
-      Alert.alert("Failed to update community", error.message);
+      showAlert("Failed to update community", error.message);
       console.error(error);
       return;
     }
@@ -118,7 +118,7 @@ export default function CommunitySettings() {
         .eq("community_id", community.id);
 
       if (deleteError) {
-        Alert.alert("Failed to update markets");
+        showAlert("Failed to update markets");
         setSaving(false);
         return;
       }
@@ -135,14 +135,14 @@ export default function CommunitySettings() {
           .insert(inserts);
 
         if (insertError) {
-          Alert.alert("Failed to update markets");
+          showAlert("Failed to update markets");
           setSaving(false);
           return;
         }
       }
     }
 
-    Alert.alert("Success", "Community updated successfully!");
+    showAlert("Success", "Community updated successfully!");
     router.back();
   };
 

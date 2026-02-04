@@ -1,9 +1,10 @@
-import { View, Text, TouchableOpacity, Alert, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { useClerk, useUser } from "@clerk/clerk-expo";
 import { colors, spacing, fontSize, borderRadius } from "@/constants/theme";
 import { commonStyles } from "@/constants/styles";
 import { Ionicons } from "@expo/vector-icons";
+import { showAlert } from "@/lib/showAlert";
 
 export default function ProfileScreen() {
   const router = useRouter();
@@ -11,14 +12,19 @@ export default function ProfileScreen() {
   const { signOut } = useClerk();
 
   const handleSignOut = () => {
-    Alert.alert("Logout", "Are you sure you want to logout?", [
+    showAlert("Logout", "Are you sure you want to logout?", [
       { text: "Cancel", style: "cancel" },
       {
         text: "Logout",
         style: "destructive",
         onPress: async () => {
-          await signOut();
-          router.replace("/auth/sign-in");
+          try {
+            await signOut();
+            router.replace("/auth/sign-in");
+          } catch (error) {
+            console.error("Logout failed:", error);
+            showAlert("Error", "Failed to log out. Please try again.");
+          }
         },
       },
     ]);

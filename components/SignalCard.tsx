@@ -1,9 +1,10 @@
-import { View, Text, TouchableOpacity, Alert } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Signal } from "@/types/signal";
 import { colors, spacing, fontSize, borderRadius } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
+import { showAlert } from "@/lib/showAlert";
 
 type SignalStatus = "pending" | "win" | "loss";
 
@@ -18,7 +19,7 @@ export default function SignalCard({ signal, onUpdated }: Props) {
   const isResolved = status !== "pending";
 
   const resolveSignal = (result: "win" | "loss") => {
-    Alert.alert(
+    showAlert(
       "Confirm Result",
       `Mark this signal as ${result.toUpperCase()}?`,
       [
@@ -39,7 +40,7 @@ export default function SignalCard({ signal, onUpdated }: Props) {
             if (error) {
               console.error("Signal update error:", error);
               setStatus(previousStatus);
-              Alert.alert("Error", "Failed to update signal");
+              showAlert("Error", "Failed to update signal");
             } else {
               onUpdated?.(result);
             }

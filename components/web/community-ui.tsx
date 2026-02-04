@@ -73,7 +73,7 @@ export default function CommunityOnboarding() {
           name,
           description,
           subscription_price: price ? Number(price) : null,
-          status: "pending",
+          status: "active",
         })
         .select()
         .single();

@@ -1,10 +1,11 @@
 import * as React from "react";
-import { Text, TextInput, TouchableOpacity, View, Alert, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
 import { colors, spacing, fontSize } from "@/constants/theme";
 import { commonStyles } from "@/constants/styles";
+import { showAlert } from "@/lib/showAlert";
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -23,7 +24,7 @@ export default function SignUpScreen() {
     if (!isLoaded) return;
 
     if (!firstName || !lastName || !emailAddress || !password) {
-      return Alert.alert("Error", "All fields are required");
+      return showAlert("Error", "All fields are required");
     }
 
     setLoading(true);
@@ -40,7 +41,7 @@ export default function SignUpScreen() {
       setPendingVerification(true);
     } catch (err: any) {
       console.error(err);
-      Alert.alert(
+      showAlert(
         "Error",
         err.errors?.[0]?.message || "Failed to create account",
       );
@@ -60,7 +61,7 @@ export default function SignUpScreen() {
 
       if (signUpAttempt.status !== "complete") {
         console.error("Sign-up not complete", signUpAttempt);
-        Alert.alert("Error", "Verification not complete");
+        showAlert("Error", "Verification not complete");
         setLoading(false);
         return;
       }
@@ -77,7 +78,7 @@ export default function SignUpScreen() {
 
       if (error) {
         console.error("Supabase insert error:", error);
-        Alert.alert("Error", "Failed to save user to database");
+        showAlert("Error", "Failed to save user to database");
         setLoading(false);
         return;
       }
@@ -85,7 +86,7 @@ export default function SignUpScreen() {
       router.replace("/onboarding/role");
     } catch (err: any) {
       console.error("onVerifyPress error:", err);
-      Alert.alert("Error", err.message || "Failed to verify email");
+      showAlert("Error", err.message || "Failed to verify email");
     } finally {
       setLoading(false);
     }
