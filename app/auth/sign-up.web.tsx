@@ -405,6 +405,12 @@ export default function SignUpScreenWeb() {
             </View>
           </View>
 
+          {/* Clerk CAPTCHA widget container (required for custom sign-up UI) */}
+          <View
+            nativeID="clerk-captcha"
+            style={{ marginBottom: spacing.lg, minHeight: 65, alignItems: "center" }}
+          />
+
           {/* Sign Up Button */}
           <TouchableOpacity
             onPress={onSignUpPress}
