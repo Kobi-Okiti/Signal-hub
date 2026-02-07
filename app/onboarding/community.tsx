@@ -72,7 +72,7 @@ export default function CommunityOnboarding() {
           owner_id: user.id,
           name,
           description,
-          subscription_price: price ? Number(price) : null,
+          subscription_price: Number(price),
           status: "active",
         })
         .select()
